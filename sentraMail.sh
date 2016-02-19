@@ -19,7 +19,7 @@ useradd -c 'Virtual Mailboxes' -d /srv/vmail -g 2000 -u 2000 -s /usr/sbin/nologi
 mkdir -p /srv/archives; chown vmail:vmail /srv/archives
 
 /etc/init.d/iptables stop
-yum -y update; yum -y install wget; yum -y install epel-release
+yum -y update; yum -y install wget unzip; yum -y install epel-release
 wget http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 yum -y localinstall remi-release-6.rpm
 \cp $CONFIGDIR/repo/remi.repo /etc/yum.repos.d/remi.repo
