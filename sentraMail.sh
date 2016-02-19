@@ -54,7 +54,9 @@ chown apache:apache /var/www/ViMbAdmin/data -R
 chown apache:apache /var/www/ViMbAdmin/var -R
 \cp $CONFIGDIR/vimbadmin/ViMbAdmin.conf /etc/httpd/conf.d/
 \cp $CONFIGDIR/vimbadmin/application.ini /var/www/ViMbAdmin/application/configs/
+chown root:root /var/www/ViMbAdmin/application/configs/application.ini
 \cp $CONFIGDIR/vimbadmin/.htaccess /var/www/ViMbAdmin/public/
+chown root:root /var/www/ViMbAdmin/public/.htaccess
 \cp $CONFIGDIR/vimbadmin/vimbadmin-mailbox-archives /etc/cron.d/
 \cp $CONFIGDIR/vimbadmin/vimbadmin-mailbox-delete /etc/cron.d/
 \cp $CONFIGDIR/vimbadmin/vimbadmin-mailbox-sizes /etc/cron.d/
