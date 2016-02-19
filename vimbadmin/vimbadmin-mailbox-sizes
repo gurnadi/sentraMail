@@ -1,0 +1,1 @@
+10 3 * * * root /var/www/ViMbAdmin/bin/vimbtool.php -a mailbox.cli-get-sizes

@@ -1,0 +1,7 @@
+user = DBUSERVIMBADMIN
+password = DBPASSVIMBADMIN
+hosts = DBHOSTVIMBADMIN
+dbname = DBNAMEVIMBADMIN
+table = mailbox
+select_field = maildir
+where_field = username

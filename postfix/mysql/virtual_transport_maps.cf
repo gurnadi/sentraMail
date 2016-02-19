@@ -1,0 +1,8 @@
+user = DBUSERVIMBADMIN
+password = DBPASSVIMBADMIN
+hosts = DBHOSTVIMBADMIN
+dbname = DBNAMEVIMBADMIN
+table = domain
+select_field = transport
+where_field = domain
+additional_conditions = and backupmx = '0' and active = '1'
