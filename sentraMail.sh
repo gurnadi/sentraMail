@@ -90,6 +90,7 @@ sed -i "s/DBUSERROUNDCUBE/$DBUSERROUNDCUBE/g" /var/www/roundcubemail/config/conf
 sed -i "s/DBPASSROUNDCUBE/$DBPASSROUNDCUBE/g" /var/www/roundcubemail/config/config.inc.php.bundle
 mv /var/www/roundcubemail/config/config.inc.php /var/www/roundcubemail/config/config.inc.php.old
 mv /var/www/roundcubemail/config/config.inc.php.bundle /var/www/roundcubemail/config/config.inc.php
+chcon -t httpd_sys_content_t /var/www/ -R
 service httpd reload
 echo "Roundcube can be accessed on http://`hostname`/mail or http://`hostname`/webmail"
 
