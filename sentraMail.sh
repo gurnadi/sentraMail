@@ -111,7 +111,7 @@ chmod 0600 /etc/postfix/ssl/`hostname`.pem
 for len in 512 1024; do
   openssl genpkey -genparam -algorithm DH -out /etc/postfix/dh_${len}.pem -pkeyopt dh_paramgen_prime_len:${len}
 done
-\cp $CONFIGDIR/mysql/* /etc/postfix/mysql/
+\cp $CONFIGDIR/postfix/mysql/* /etc/postfix/mysql/
 sed -i "s/DBNAMEVIMBADMIN/$DBNAMEVIMBADMIN/g" /etc/postfix/mysql/*
 sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /etc/postfix/mysql/*
 sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /etc/postfix/mysql/*
