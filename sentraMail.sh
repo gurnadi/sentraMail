@@ -12,12 +12,12 @@ echo "5. Ensure that MySQL server having no password (fresh installation)"
 echo "6. Mailbox will be installed on /srv/vmail directory."
 echo "7. After the installation, please take a look the documentation on /root/sentraMail.log"
 echo ""
-read -rsp "Press enter to continue..."
+read -rsp "Press ENTER to continue..."
 printf "\033c"
 echo "Please type your domain..."
 read -p "Your Domain [Example: example.com] : " YOURDOMAIN
 echo ""
-read -rsp "Are you sure? Press Enter if YES or CTRL+C to abort"
+read -rsp "Are you sure? Press ENTER if YES or CTRL+C to abort"
 
 CONFIGDIR=`pwd`;
 OFFICIALEMAIL="noreply@${YOURDOMAIN}";
