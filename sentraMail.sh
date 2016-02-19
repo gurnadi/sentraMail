@@ -50,8 +50,8 @@ wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz
 echo "Melakukan proses ekstrak ViMbAdmin"
 tar zxf $CONFIGDIR/ViMbAdmin.tar.gz
 mv ViMbAdmin /var/www
-chown apache:apache /var/www/VimbAdmin/data -R
-chown apache:apache /var/www/VimbAdmin/var -R
+chown apache:apache /var/www/ViMbAdmin/data -R
+chown apache:apache /var/www/ViMbAdmin/var -R
 \cp $CONFIGDIR/vimbadmin/ViMbAdmin.conf /etc/httpd/conf.d/
 \cp $CONFIGDIR/vimbadmin/application.ini /var/www/ViMbAdmin/application/configs/
 \cp $CONFIGDIR/vimbadmin/.htaccess /var/www/ViMbAdmin/public/
