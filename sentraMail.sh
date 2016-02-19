@@ -10,7 +10,9 @@ echo "3. sentraMail will use your hostname as a subdomain to access roundcube an
 echo "4. Ensure that you already setup DNS and MX Correctly to this IP Address"
 echo "5. Ensure that MySQL server having no password (fresh installation)"
 echo "6. Mailbox will be installed on /srv/vmail directory."
-echo "7. After the installation, please take a look the documentation on /root/sentraMail.log"
+echo "7. Roundcube will be installed on /var/www/roundcubemail"
+echo "8. ViMbAdmin will be installed on /var/www/ViMbAdmin"
+echo "9. After the installation, please take a look the documentation on /root/sentraMail.log"
 echo ""
 read -rsp "Press ENTER to continue..."
 printf "\033c"
@@ -59,9 +61,10 @@ wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz -O ViMbAdmin.tar.gz
 # git clone https://github.com/opensolutions/ViMbAdmin.git /var/www
 # curl -sS https://getcomposer.org/installer | php
 # mv composer.phar /var/www/ViMbAdmin/composer
+# DSTDIR=`pwd`
 # cd /var/www/ViMbAdmin
 # ./composer install
-# cd $CONFIGDIR
+# cd $DSTDIR
 ###################################
 echo "Extracting ViMbAdmin"
 tar zxf $CONFIGDIR/ViMbAdmin.tar.gz
@@ -87,6 +90,7 @@ chkconfig httpd on; service httpd start
 # this line will be act to replace "mysql -u root $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql"
 # /var/www/ViMbAdmin/doctrine2-cli.php orm:schema-tool:create
 # insert default username & password for ViMbAdmin
+# insert salt and configure application.ini 
 
 # Installing ROUNDCUBE
 echo "Installing Roundcube  Database"
@@ -167,9 +171,11 @@ echo "1. This script works only on RHEL 6.x or CentOS 6.x or any other linux dis
 echo "2. Ensure that your hostname is Fully Qualified Domain Name (FQDN) [Example: mail.example.com]" >> /root/sentraMail.log
 echo "3. sentraMail will use your hostname as a subdomain to access roundcube and ViMbAdmin" >> /root/sentraMail.log
 echo "4. Ensure that you already setup DNS and MX Correctly to this IP Address" >> /root/sentraMail.log
-echo "5. Ensure that MySQL server having no password" >> /root/sentraMail.log
+echo "5. Ensure that MySQL server having no password (fresh installation)" >> /root/sentraMail.log
 echo "6. Mailbox will be installed on /srv/vmail directory." >> /root/sentraMail.log
-echo "7. After the installation, please take a look the documentation on /root/sentraMail.log" >> /root/sentraMail.log
+echo "7. Roundcube will be installed on /var/www/roundcubemail" >> /root/sentraMail.log
+echo "8. ViMbAdmin will be installed on /var/www/ViMbAdmin" >> /root/sentraMail.log
+echo "9. After the installation, please take a look the documentation on /root/sentraMail.log" >> /root/sentraMail.log
 echo "" >> /root/sentraMail.log
 echo "DB NAME ViMbAdmin: $DBNAMEVIMBADMIN" >> /root/sentraMail.log
 echo "DB USER ViMbAdmin: $DBUSERVIMBADMIN" >> /root/sentraMail.log
@@ -194,10 +200,18 @@ echo "You can access Roundcube WebMail on http://`hostname`/mail" >> /root/sentr
 echo "Please use your username & password that you already create on the ViMbAdmin" >> /root/sentraMail.log
 echo "" >> /root/sentraMail.log
 
+echo "netstat -tupln | grep LISTEN" >> /root/sentraMail.log
+echo "" >> /root/sentraMail.log
 netstat -tupln | grep LISTEN >> /root/sentraMail.log
 echo "" >> /root/sentraMail.log
 
+echo "iptables -L" >> /root/sentraMail.log
+echo ""
 iptables -L >> /root/sentraMail.log
+
 echo "Hardening Your MySQL Configuration";
 mysql_secure_installation
+
+echo ""
+echo ""
 echo "INSTALLATION DONE!, please check /root/sentraMail.log";
