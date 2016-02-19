@@ -1,7 +1,24 @@
 #!/bin/bash
+if [[ ${EUID} -ne 0 ]]; then
+  echo "ERROR: YOU MUST RUN THIS SCRIPT AS ROOT!"
+  exit 1
+fi
+echo ""
+echo "1. This script works only on RHEL 6.x or CentOS 6.x or any other linux distribution based on RHEL"
+echo "2. Ensure that your hostname is Fully Qualified Domain Name (FQDN) [Example: mail.example.com]"
+echo "3. sentraMail will use your hostname as a subdomain to access roundcube and ViMbAdmin"
+echo "4. Ensure that you already setup DNS and MX Correctly to this IP Address"
+echo "5. Ensure that MySQL server having no password (fresh installation)"
+echo "6. Mailbox will be installed on /srv/vmail directory."
+echo "7. After the installation, please take a look the documentation on /root/sentraMail.log"
+echo ""
+read -rsp "Press enter to continue..."
+printf "\033c"
+echo "Please type your domain..."
 read -p "Your Domain [Example: example.com] : " YOURDOMAIN
+echo ""
+read -rsp "Are you sure? Press Enter if YES or CTRL+C to abort"
 
-### START OF CONFIGURATION ####
 CONFIGDIR=`pwd`;
 OFFICIALEMAIL="noreply@${YOURDOMAIN}";
 DBNAMEVIMBADMIN="vimbadmin";
@@ -13,7 +30,6 @@ DBNAMEROUNDCUBE="roundcube";
 DBUSERROUNDCUBE="roundcube";
 DBPASSROUNDCUBE=`head -c 500 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
 DBHOSTROUNDCUBE="localhost";
-### END OF CONFIGURATION ####
 
 groupadd -g 2000 vmail
 useradd -c 'Virtual Mailboxes' -d /srv/vmail -g 2000 -u 2000 -s /usr/sbin/nologin -m vmail
@@ -109,6 +125,7 @@ for len in 512 1024; do
   openssl genpkey -genparam -algorithm DH -out /etc/postfix/dh_${len}.pem -pkeyopt dh_paramgen_prime_len:${len}
 done
 \cp $CONFIGDIR/postfix/mysql/* /etc/postfix/mysql/
+chmod 0640 /etc/postfix/mysql/*
 sed -i "s/DBNAMEVIMBADMIN/$DBNAMEVIMBADMIN/g" /etc/postfix/mysql/*
 sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /etc/postfix/mysql/*
 sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /etc/postfix/mysql/*
@@ -146,7 +163,15 @@ echo "Turn on IPTables"
 \cp $CONFIGDIR/iptables /etc/sysconfig/iptables
 chkconfig iptables on; /etc/init.d/iptables start
 
-echo "DB NAME ViMbAdmin: $DBNAMEVIMBADMIN" > /root/sentraMail.log
+echo "1. This script works only on RHEL 6.x or CentOS 6.x or any other linux distribution based on RHEL" > /root/sentraMail.log
+echo "2. Ensure that your hostname is Fully Qualified Domain Name (FQDN) [Example: mail.example.com]" >> /root/sentraMail.log
+echo "3. sentraMail will use your hostname as a subdomain to access roundcube and ViMbAdmin" >> /root/sentraMail.log
+echo "4. Ensure that you already setup DNS and MX Correctly to this IP Address" >> /root/sentraMail.log
+echo "5. Ensure that MySQL server having no password" >> /root/sentraMail.log
+echo "6. Mailbox will be installed on /srv/vmail directory." >> /root/sentraMail.log
+echo "7. After the installation, please take a look the documentation on /root/sentraMail.log" >> /root/sentraMail.log
+echo "" >> /root/sentraMail.log
+echo "DB NAME ViMbAdmin: $DBNAMEVIMBADMIN" >> /root/sentraMail.log
 echo "DB USER ViMbAdmin: $DBUSERVIMBADMIN" >> /root/sentraMail.log
 echo "DB PASS ViMbAdmin: $DBPASSVIMBADMIN" >> /root/sentraMail.log
 echo "DB HOST ViMbAdmin: $DBHOSTVIMBADMIN" >> /root/sentraMail.log
