@@ -24,7 +24,7 @@ wget http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 yum -y localinstall remi-release-6.rpm
 rm -f remi-release-6.rpm
 \cp $CONFIGDIR/repo/remi.repo /etc/yum.repos.d/remi.repo
-yum -y install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php-pear php-pecl-igbinary php-pecl-msgpack php-pdo php-mysqlnd php-pecl-memcached php-pecl-memcache php php-soap php-xml php-intl php-process php-mbstring mysql-server dovecot dovecot-pigeonhole dovecot-mysql mod_ssl clamav-db clamav clamd spamassassin amavisd-new 
+yum -y install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php-pear php-pecl-igbinary php-pecl-msgpack php-pdo php-mysqlnd php-pecl-memcached php-pecl-memcache php php-soap php-xml php-intl php-process php-mbstring mysql-server dovecot dovecot-pigeonhole dovecot-mysql mod_ssl clamav-db clamav clamd spamassassin amavisd-new git
 
 \cp $CONFIGDIR/mysql/my.cnf /etc/my.cnf
 \cp $CONFIGDIR/php/php.ini /etc/php.ini
@@ -67,6 +67,10 @@ chown apache:apache /var/www/VimbAdmin/var -R
 echo "Menyalakan Apache Web Server"
 echo "ViMbAdmin bisa diakses pada alamat http://`hostname`/mailmin"
 chkconfig httpd on; service httpd start
+
+# untuk menggantikan mysql -u root $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql
+# /var/www/ViMbAdmin/doctrine2-cli.php orm:schema-tool:create
+# insert default username & password for ViMbAdmin
 
 # Eksekusi ROUNDCUBE
 echo "Instalasi Database Roundcube WebMail"
