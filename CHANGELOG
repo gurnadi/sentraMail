@@ -10,3 +10,4 @@ Version 1.0
 - Postfix 2.6.6-6
 - Dovecot 2.0.9-19
 - Apache 2.2.15-47
+- Selinux support
