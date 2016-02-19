@@ -81,6 +81,7 @@ echo "Database Roundcube created";
 echo "Extracting Roundcube"
 tar zxf $CONFIGDIR/roundcube/roundcubemail.tar.gz
 mv roundcubemail /var/www
+chown root:root /var/www/roundcubemail -R
 echo "<?php header(\"Location http://`hostname`/mail\"); ?>" > /var/www/html/index.php
 \cp $CONFIGDIR/roundcube/RoundCube.conf /etc/httpd/conf.d/
 sed -i "s/DBNAMEROUNDCUBE/$DBNAMEROUNDCUBE/g" /var/www/roundcubemail/config/config.inc.php.bundle
