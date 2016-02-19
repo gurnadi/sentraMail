@@ -1,16 +1,17 @@
 #!/bin/bash
+read -p "Your Domain [Example: example.com] : " YOURDOMAIN
 
 ### START OF CONFIGURATION ####
 CONFIGDIR=`pwd`;
-OFFICIALEMAIL="postmaster@example.com";
+OFFICIALEMAIL="noreply@${YOURDOMAIN}";
 DBNAMEVIMBADMIN="vimbadmin";
 DBUSERVIMBADMIN="vimbadmin";
-DBPASSVIMBADMIN="supersecret2016";
+DBPASSVIMBADMIN=`head -c 500 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
 DBHOSTVIMBADMIN="localhost";
 
 DBNAMEROUNDCUBE="roundcube";
 DBUSERROUNDCUBE="roundcube";
-DBPASSROUNDCUBE="supersecret2016";
+DBPASSROUNDCUBE=`head -c 500 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
 DBHOSTROUNDCUBE="localhost";
 ### END OF CONFIGURATION ####
 
@@ -161,6 +162,7 @@ echo "You can access ViMbAdmin on http://`hostname`/mailmin" >> /root/sentraMail
 echo "Please use this username & password to open ViMbAdmin" >> /root/sentraMail.log
 echo "Username: postmaster@example.com" >> /root/sentraMail.log
 echo "Password: supersecret2016" >> /root/sentraMail.log
+echo "Please create a new super admin on the ViMbAdmin and remove this user" >> /root/sentraMail.log
 echo "" >> /root/sentraMail.log
 
 echo "You can access Roundcube WebMail on http://`hostname`/mail" >> /root/sentraMail.log
