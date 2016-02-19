@@ -1,6 +1,6 @@
 driver = mysql
 
-connect = host=DBHOSTVIMBADMIN user=DBUSERVIMBADMIN password=DBPASSVIMBADMIN dbname=DBNAMEVIMBADBMIN
+connect = host=DBHOSTVIMBADMIN user=DBUSERVIMBADMIN password=DBPASSVIMBADMIN dbname=DBNAMEVIMBADMIN
 default_pass_scheme = MD5
 
 password_query = SELECT username as user, password as password, \
