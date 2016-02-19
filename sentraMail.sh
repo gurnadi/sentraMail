@@ -58,6 +58,10 @@ chown apache:apache /var/www/ViMbAdmin/var -R
 \cp $CONFIGDIR/vimbadmin/vimbadmin-mailbox-archives /etc/cron.d/
 \cp $CONFIGDIR/vimbadmin/vimbadmin-mailbox-delete /etc/cron.d/
 \cp $CONFIGDIR/vimbadmin/vimbadmin-mailbox-sizes /etc/cron.d/
+sed -i "s/DBNAMEVIMBADMIN/$DBNAMEVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini
+sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini
+sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini
+sed -i "s/DBPASSVIMBADMIN/$DBPASSVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini
 #sed -i "s/DBNAMEVIMBADMIN/$DBNAMEVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
 #sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
 #sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
