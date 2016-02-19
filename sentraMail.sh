@@ -115,7 +115,7 @@ chkconfig postfix on; /etc/init.d/postfix start
 
 # EKSEKUSI AMAVISD
 echo "Konfigurasi Amavis Daemon"
-\cp $CONFIGDIR/amavis/amavisd.conf /etc/amavisd/
+\cp $CONFIGDIR/amavisd/amavisd.conf /etc/amavisd/
 sed -i "s/MYHOSTNAME/`hostname`/g" /etc/amavisd/amavisd.conf
 sed -i "s/MYHOSTNAME/`hostname`/g" /etc/amavisd/amavisd.conf
 echo "Menyalakan Amavis Daemon"
