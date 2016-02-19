@@ -1,0 +1,12 @@
+Version 1.0
+- Support CentOS 6.7
+- PHP 5.6.18-1 (Remi Repository)
+- MySQL 5.5.48-1 (Remi Repository)
+- Roundcube 1.1.4
+- ViMbAdmin 3
+- Amavis 2.9.1-2
+- Clamav 0.9.9-3
+- SpamAssassin 3.3.1-3
+- Postfix 2.6.6-6
+- Dovecot 2.0.9-19
+- Apache 2.2.15-47
