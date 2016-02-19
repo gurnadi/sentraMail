@@ -38,20 +38,30 @@ GRANT ALL ON $DBNAMEVIMBADMIN.* TO $DBUSERVIMBADMIN@$DBHOSTVIMBADMIN IDENTIFIED 
 FLUSH PRIVILEGES;"
 mysql -u root $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql
 echo "Database ViMbAdmin sudah dibuat";
+####this links is not active yet, we will replace using git###
+wget https://cloud.sentradata.id/public/ViMbAdmin.tar.gz
+# git clone https://github.com/opensolutions/ViMbAdmin.git /var/www
+# curl -sS https://getcomposer.org/installer | php
+# mv composer.phar /var/www/ViMbAdmin/composer
+# cd /var/www/ViMbAdmin
+# ./composer install
+###################################
 tar zxvf $CONFIGDIR/vimbadmin/ViMbAdmin.tar.gz
 mv ViMbAdmin /var/www
 chown apache:apache /var/www/VimbAdmin/data -R
 chown apache:apache /var/www/VimbAdmin/var -R
 \cp $CONFIGDIR/vimbadmin/ViMbAdmin.conf /etc/httpd/conf.d/
+\cp $CONFIGDIR/vimbadmin/application.ini /var/www/ViMbAdmin/application/configs/
+\cp $CONFIGDIR/vimbadmin/.htaccess /var/www/ViMbAdmin/public/
 \cp $CONFIGDIR/vimbadmin/vimbadmin-mailbox-archives /etc/cron.d/
 \cp $CONFIGDIR/vimbadmin/vimbadmin-mailbox-delete /etc/cron.d/
 \cp $CONFIGDIR/vimbadmin/vimbadmin-mailbox-sizes /etc/cron.d/
-sed -i "s/DBNAMEVIMBADMIN/$DBNAMEVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
-sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
-sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
-sed -i "s/DBPASSVIMBADMIN/$DBPASSVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
-mv /var/www/ViMbAdmin/application/configs/application.ini /var/www/ViMbAdmin/application/configs/application.ini.old
-mv /var/www/ViMbAdmin/application/configs/application.ini.bundle /var/www/ViMbAdmin/application/configs/application.ini
+#sed -i "s/DBNAMEVIMBADMIN/$DBNAMEVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
+#sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
+#sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
+#sed -i "s/DBPASSVIMBADMIN/$DBPASSVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini.bundle
+#mv /var/www/ViMbAdmin/application/configs/application.ini /var/www/ViMbAdmin/application/configs/application.ini.old
+#mv /var/www/ViMbAdmin/application/configs/application.ini.bundle /var/www/ViMbAdmin/application/configs/application.ini
 echo "Menyalakan Apache Web Server"
 echo "ViMbAdmin bisa diakses pada alamat http://`hostname`/mailmin"
 chkconfig httpd on; service httpd start
