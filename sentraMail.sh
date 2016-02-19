@@ -39,12 +39,13 @@ FLUSH PRIVILEGES;"
 mysql -u root $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql
 echo "Database ViMbAdmin sudah dibuat";
 ####this links is not active yet, we will replace using git###
-wget https://cloud.sentradata.id/public/ViMbAdmin.tar.gz
+wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz
 # git clone https://github.com/opensolutions/ViMbAdmin.git /var/www
 # curl -sS https://getcomposer.org/installer | php
 # mv composer.phar /var/www/ViMbAdmin/composer
 # cd /var/www/ViMbAdmin
 # ./composer install
+# cd $CONFIGDIR
 ###################################
 tar zxvf $CONFIGDIR/vimbadmin/ViMbAdmin.tar.gz
 mv ViMbAdmin /var/www
@@ -164,4 +165,6 @@ netstat -tupln | grep LISTEN >> /root/loginstalasi.txt
 echo "" >> /root/loginstalasi.txt
 
 iptables -L >> /root/loginstalasi.txt
+echo "Konfigurasi Password MySQL root";
+mysql_secure_installation
 echo "PROSES INSTALASI SELESAI, Cek /root/loginstalasi.txt untuk informasi lebih lanjut";
