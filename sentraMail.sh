@@ -47,6 +47,7 @@ wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz
 # ./composer install
 # cd $CONFIGDIR
 ###################################
+echo "Melakukan proses ekstrak ViMbAdmin"
 tar zxf $CONFIGDIR/ViMbAdmin.tar.gz
 mv ViMbAdmin /var/www
 chown apache:apache /var/www/VimbAdmin/data -R
@@ -78,6 +79,7 @@ GRANT ALL ON $DBNAMEROUNDCUBE.* TO $DBUSERROUNDCUBE@$DBHOSTROUNDCUBE IDENTIFIED 
 FLUSH PRIVILEGES;"
 mysql -u root $DBNAMEROUNDCUBE < $CONFIGDIR/roundcube/roundcubemail.sql
 echo "Database Roundcube sudah dibuat";
+echo "Melakukan proses ekstrak Roundcube"
 tar zxf $CONFIGDIR/roundcube/roundcubemail.tar.gz
 mv roundcubemail /var/www
 \cp $CONFIGDIR/roundcube/RoundCube.conf /etc/httpd/conf.d/
