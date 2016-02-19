@@ -77,11 +77,11 @@ echo "Instalasi Database Roundcube WebMail"
 mysql -u root -e "CREATE DATABASE $DBNAMEROUNDCUBE; \
 GRANT ALL ON $DBNAMEROUNDCUBE.* TO $DBUSERROUNDCUBE@$DBHOSTROUNDCUBE IDENTIFIED BY \"$DBPASSROUNDCUBE\"; \
 FLUSH PRIVILEGES;"
-mysql -u root $DBNAMEROUNDCUBE < $CONFIGDIR/roundcubemail/roundcubemail.sql
+mysql -u root $DBNAMEROUNDCUBE < $CONFIGDIR/roundcube/roundcubemail.sql
 echo "Database Roundcube sudah dibuat";
-tar zxvf $CONFIGDIR/roundcubemail/roundcubemail.tar.gz
+tar zxvf $CONFIGDIR/roundcube/roundcubemail.tar.gz
 mv roundcubemail /var/www
-\cp $CONFIGDIR/roundcubemail/RoundCube.conf /etc/httpd/conf.d/
+\cp $CONFIGDIR/roundcube/RoundCube.conf /etc/httpd/conf.d/
 sed -i "s/DBNAMEROUNDCUBE/$DBNAMEROUNDCUBE/g" /var/www/roundcubemail/config/config.inc.php.bundle
 sed -i "s/DBHOSTROUNDCUBE/$DBHOSTROUNDCUBE/g" /var/www/roundcubemail/config/config.inc.php.bundle
 sed -i "s/DBUSERROUNDCUBE/$DBUSERROUNDCUBE/g" /var/www/roundcubemail/config/config.inc.php.bundle
@@ -114,9 +114,9 @@ chkconfig postfix on; /etc/init.d/postfix start
 
 # EKSEKUSI AMAVISD
 echo "Konfigurasi Amavis Daemon"
-\cp $CONFIGDIR/amavis/amavisd.conf /etc/amavis/
-sed -i "s/MYHOSTNAME/`hostname`/g" /etc/amavis/amavisd.conf
-sed -i "s/MYHOSTNAME/`hostname`/g" /etc/amavis/amavisd.conf
+\cp $CONFIGDIR/amavis/amavisd.conf /etc/amavisd/
+sed -i "s/MYHOSTNAME/`hostname`/g" /etc/amavisd/amavisd.conf
+sed -i "s/MYHOSTNAME/`hostname`/g" /etc/amavisd/amavisd.conf
 echo "Menyalakan Amavis Daemon"
 chkconfig amavisd on; /etc/init.d/amavisd start
 echo "Menyalakan Clamav-Amavis Daemon"
@@ -132,10 +132,10 @@ chmod a+x /usr/local/bin/quota-warning.sh
 
 sed -i "s/MYEMAIL/$OFFICIALEMAIL/g" /etc/dovecot/conf.d/*
 sed -i "s/MYHOSTNAME/`hostname`/g" /etc/dovecot/conf.d/*
-sed -i "s/DBNAMEVIMBADMIN/$DBNAMEVIMBADMIN/g" /etc/dovecot/*
-sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /etc/dovecot/*
-sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /etc/dovecot/*
-sed -i "s/DBPASSVIMBADMIN/$DBPASSVIMBADMIN/g" /etc/dovecot/*
+sed -i "s/DBNAMEVIMBADMIN/$DBNAMEVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "s/DBPASSVIMBADMIN/$DBPASSVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
 echo "Menyalakan Dovecot"
 chkconfig dovecot on; /etc/init.d/dovecot start
 
