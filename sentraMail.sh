@@ -22,7 +22,6 @@ mkdir -p /srv/archives; chown vmail:vmail /srv/archives
 yum -y update; yum -y install wget; yum -y install epel-release
 wget http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 yum -y localinstall remi-release-6.rpm
-rm -f remi-release-6.rpm
 \cp $CONFIGDIR/repo/remi.repo /etc/yum.repos.d/remi.repo
 yum -y install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php-pear php-pecl-igbinary php-pecl-msgpack php-pdo php-mysqlnd php-pecl-memcached php-pecl-memcache php php-soap php-xml php-intl php-process php-mbstring mysql-server dovecot dovecot-pigeonhole dovecot-mysql mod_ssl clamav-db clamav clamd spamassassin amavisd-new git
 
@@ -48,7 +47,7 @@ wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz
 # ./composer install
 # cd $CONFIGDIR
 ###################################
-tar zxvf $CONFIGDIR/vimbadmin/ViMbAdmin.tar.gz
+tar zxf $CONFIGDIR/ViMbAdmin.tar.gz
 mv ViMbAdmin /var/www
 chown apache:apache /var/www/VimbAdmin/data -R
 chown apache:apache /var/www/VimbAdmin/var -R
@@ -79,7 +78,7 @@ GRANT ALL ON $DBNAMEROUNDCUBE.* TO $DBUSERROUNDCUBE@$DBHOSTROUNDCUBE IDENTIFIED 
 FLUSH PRIVILEGES;"
 mysql -u root $DBNAMEROUNDCUBE < $CONFIGDIR/roundcube/roundcubemail.sql
 echo "Database Roundcube sudah dibuat";
-tar zxvf $CONFIGDIR/roundcube/roundcubemail.tar.gz
+tar zxf $CONFIGDIR/roundcube/roundcubemail.tar.gz
 mv roundcubemail /var/www
 \cp $CONFIGDIR/roundcube/RoundCube.conf /etc/httpd/conf.d/
 sed -i "s/DBNAMEROUNDCUBE/$DBNAMEROUNDCUBE/g" /var/www/roundcubemail/config/config.inc.php.bundle
