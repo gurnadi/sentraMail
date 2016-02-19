@@ -1,3 +1,0 @@
-10 */2 * * * /var/www/ViMbAdmin/bin/vimbtool.php -a archive.cli-archive-pendings
-30 */2 * * * /var/www/ViMbAdmin/bin/vimbtool.php -a archive.cli-restore-pendings
-50 */2 * * * /var/www/ViMbAdmin/bin/vimbtool.php -a archive.cli-delete-pendings
