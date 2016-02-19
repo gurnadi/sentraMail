@@ -20,7 +20,7 @@ mkdir -p /srv/archives; chown vmail:vmail /srv/archives
 
 /etc/init.d/iptables stop
 yum -y update; yum -y install wget unzip; yum -y install epel-release
-wget http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+wget http://rpms.famillecollet.com/enterprise/remi-release-6.rpm -O remi-release-6.rpm
 yum -y localinstall remi-release-6.rpm
 \cp $CONFIGDIR/repo/remi.repo /etc/yum.repos.d/remi.repo
 yum -y install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php-pear php-pecl-igbinary php-pecl-msgpack php-pdo php-mysqlnd php-pecl-memcached php-pecl-memcache php php-soap php-xml php-intl php-process php-mbstring mysql-server dovecot dovecot-pigeonhole dovecot-mysql mod_ssl clamav-db clamav clamd spamassassin amavisd-new git
@@ -39,7 +39,7 @@ FLUSH PRIVILEGES;"
 mysql -u root $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql
 echo "Database ViMbAdmin sudah dibuat";
 ####this links is not active yet, we will replace using git###
-wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz
+wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz -O ViMbAdmin.tar.gz
 # git clone https://github.com/opensolutions/ViMbAdmin.git /var/www
 # curl -sS https://getcomposer.org/installer | php
 # mv composer.phar /var/www/ViMbAdmin/composer
