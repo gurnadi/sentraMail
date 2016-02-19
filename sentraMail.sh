@@ -152,7 +152,7 @@ echo "" >> /root/loginstalasi.txt
 echo "DB NAME Roundcube: $DBNAMEROUNDCUBE" >> /root/loginstalasi.txt
 echo "DB USER Roundcube: $DBUSERROUNDCUBE" >> /root/loginstalasi.txt
 echo "DB PASS Roundcube: $DBPASSROUNDCUBE" >> /root/loginstalasi.txt
-echo "DB HOST Roundcube: $DBHOSTROUNDCUBE >> /root/loginstalasi.txt
+echo "DB HOST Roundcube: $DBHOSTROUNDCUBE" >> /root/loginstalasi.txt
 echo "" >> /root/loginstalasi.txt
 
 echo "silakan akses ViMbAdmin di http://`hostname`/mailmin" >> /root/loginstalasi.txt
