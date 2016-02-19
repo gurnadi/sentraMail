@@ -6,4 +6,4 @@ this is still on development phase.
 1. Ensure that you already install CentOS 6.x using minimalist iso
 2. Ensure that your server already connected to the internet
 3. This script work only on fresh installation on Minimalist CentOS 6.x
-4. Ensure that your selinux configuration is disabled
+4. If you have some problem, please try to disable selinux
