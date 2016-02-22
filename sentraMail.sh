@@ -19,8 +19,8 @@ echo "Please type your domain..."
 read -p "Your Domain [Example: example.com] : " YOURDOMAIN
 echo "Please type your MySQL Database Credentials..."
 read -p "MySQL DB Host: " YOURDBHOST
-read -p "MySQL DB User: " YOURDBUSER
-read -p "MySQL DB Pass: " YOURDBPASS
+read -p "MySQL DB root User: " YOURDBUSER
+read -p "MySQL DB root Pass: " YOURDBPASS
 
 if [ "${YOURDBHOST}" == "" ] || [ "${YOURDBUSER}" == "" ]; then
     echo "DB Host or DB User can not empty!"
@@ -53,12 +53,19 @@ useradd -c 'Virtual Mailboxes' -d /srv/vmail -g 2000 -u 2000 -s /usr/sbin/nologi
 mkdir -p /srv/archives; chown vmail:vmail /srv/archives
 
 /etc/init.d/iptables stop
-yum -y update; yum -y install wget; yum -y install epel-release
+echo "Update your Operating System, please wait..."
+yum -y -q update;
+echo "Installing wget, please wait..."
+yum -y -q install wget; 
+echo "Installing Epel Repository, please wait..."
+yum -y -q install epel-release
 echo "Download Remi Repository, please wait..."
 wget -q http://rpms.famillecollet.com/enterprise/remi-release-6.rpm -O remi-release-6.rpm
-yum -y localinstall remi-release-6.rpm
+echo "Install Remi Repository, please wait..."
+yum -y -q localinstall remi-release-6.rpm
 \cp $CONFIGDIR/repo/remi.repo /etc/yum.repos.d/remi.repo
-yum -y install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php-pear php-pecl-igbinary php-pecl-msgpack php-pdo php-mysqlnd php-pecl-memcached php-pecl-memcache php php-soap php-xml php-intl php-process php-mbstring mysql-server dovecot dovecot-pigeonhole dovecot-mysql mod_ssl clamav-db clamav clamd spamassassin amavisd-new git
+echo "Installing all packages. It will takes a long time, depends on your connection, please be patience..."
+yum -y -q install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php-pear php-pecl-igbinary php-pecl-msgpack php-pdo php-mysqlnd php-pecl-memcached php-pecl-memcache php php-soap php-xml php-intl php-process php-mbstring mysql-server dovecot dovecot-pigeonhole dovecot-mysql mod_ssl clamav-db clamav clamd spamassassin amavisd-new git
 \cp $CONFIGDIR/mysql/my.cnf /etc/my.cnf
 \cp $CONFIGDIR/php/php.ini /etc/php.ini
 
@@ -74,7 +81,7 @@ ${MYCOMMAND} $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql
 echo "Database ViMbAdmin created";
 ####this links is not active yet, we will replace using git###
 echo "Download ViMbAdmin source code, please wait..."
-wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz -O ViMbAdmin.tar.gz
+wget -q http://sentradata.id/sentraMail/ViMbAdmin.tar.gz -O ViMbAdmin.tar.gz
 # git clone https://github.com/opensolutions/ViMbAdmin.git /var/www
 # curl -sS https://getcomposer.org/installer | php
 # mv composer.phar /var/www/ViMbAdmin/composer
