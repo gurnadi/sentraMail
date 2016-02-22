@@ -68,10 +68,14 @@ echo "Turn on MySQL Server"
 if [ "`/etc/init.d/mysqld status | grep stopped`" != "" ]; then
   chkconfig mysqld on; service mysqld start
 fi
-if [ "${YOURDBPASS}" != "" ]; then
+
+if [ "${YOURDBBPASS}" != "" ]; then 
   CHECKMYSQL1=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -p${YOURDBPASS} -e exit 2>/dev/null; echo $?`
+  CHECKMYSQL2=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -e exit 2>/dev/null; echo $?`
+else
+  CHECKMYSQL1=1
+  CHECKMYSQL2=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -e exit 2>/dev/null; echo $?`
 fi
-CHECKMYSQL2=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -e exit 2>/dev/null; echo $?`
 
 if [ "$CHECKMYSQL1" == "1" ] && [ "$CHECKMYSQL2" == "1" ]; then
   echo "Incorrect MySQL Parameter (DB Host, DB User or DB Pass)"
