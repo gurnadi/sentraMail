@@ -213,7 +213,7 @@ sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
 sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
 sed -i "s/DBPASSVIMBADMIN/$DBPASSVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
 echo "Turn on Dovecot"
-if [ "`/etc/init.d/clamd.dovecot status | grep stopped`" != "" ]; then
+if [ "`/etc/init.d/dovecot status | grep stopped`" != "" ]; then
   chkconfig dovecot on; /etc/init.d/dovecot start
 else
   chkconfig dovecot on; /etc/init.d/dovecot restart
