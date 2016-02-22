@@ -10,8 +10,7 @@ this is still on development phase.
 5. Ensure that your hostname is Fully Qualified Domain Name (FQDN) [Example: mail.example.com]
 6. sentraMail will use your hostname as a subdomain to access roundcube and ViMbAdmin
 7. Ensure that you already setup DNS and MX Correctly to this IP Address
-8. Ensure that MySQL server having no password (fresh installation)
-9. Mailbox will be installed on /srv/vmail directory
-10. Roundcube will be installed on /var/www/roundcubemail
-11. ViMbAdmin will be installed on /var/www/ViMbAdmin
-10. After the installation, please take a look the documentation on /root/sentraMail.log
+8. Mailbox will be installed on /srv/vmail directory
+9. Roundcube will be installed on /var/www/roundcubemail
+10. ViMbAdmin will be installed on /var/www/ViMbAdmin
+11. After the installation, please take a look the documentation on /root/sentraMail.log
