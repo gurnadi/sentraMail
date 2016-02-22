@@ -14,7 +14,7 @@ echo "7. ViMbAdmin will be installed on /var/www/ViMbAdmin"
 echo "8. After the installation, please take a look the documentation on /root/sentraMail.log"
 echo ""
 read -rsp "Press ENTER to continue..."
-printf "\033c"
+echo ""
 echo "Please type your domain..."
 read -p "Your Domain [Example: example.com] : " YOURDOMAIN
 echo "Please type your MySQL Database Credentials..."
@@ -35,6 +35,7 @@ fi
 
 echo ""
 read -rsp "Are you sure? Press ENTER if YES or CTRL+C to abort"
+echo ""
 
 CONFIGDIR=`pwd`;
 OFFICIALEMAIL="noreply@${YOURDOMAIN}";
