@@ -18,6 +18,22 @@ read -rsp "Press ENTER to continue..."
 printf "\033c"
 echo "Please type your domain..."
 read -p "Your Domain [Example: example.com] : " YOURDOMAIN
+echo "Please type your MySQL Database Credentials..."
+read -p "MySQL DB Host: " YOURDBHOST
+read -p "MySQL DB User: " YOURDBUSER
+read -p "MySQL DB Pass: " YOURDBPASS
+
+if [ "${YOURDBHOST}" == "" ] || [ "${YOURDBUSER}" == "" ]; then
+    echo "DB Host or DB User can not empty!"
+    exit 1
+fi
+
+if [ "${YOURDBPASS}" != "" ]; then
+    MYCOMMAND="mysql -u${YOURDBUSER} -h${YOURDBHOST} -p${YOURDBPASS} "
+else
+    MYCOMMAND="mysql -u${YOURDBUSER} -h${YOURDBHOST} "
+fi
+
 echo ""
 read -rsp "Are you sure? Press ENTER if YES or CTRL+C to abort"
 
@@ -51,10 +67,10 @@ chkconfig mysqld on; service mysqld start
 
 # Installing VIMBADMIN
 echo "Installing ViMbAdmin Database"
-mysql -u root -e "CREATE DATABASE $DBNAMEVIMBADMIN; \
+${MYCOMMAND} -e "CREATE DATABASE $DBNAMEVIMBADMIN; \
 GRANT ALL ON $DBNAMEVIMBADMIN.* TO $DBUSERVIMBADMIN@$DBHOSTVIMBADMIN IDENTIFIED BY \"$DBPASSVIMBADMIN\"; \
 FLUSH PRIVILEGES;"
-mysql -u root $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql
+${MYCOMMAND} $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql
 echo "Database ViMbAdmin created";
 ####this links is not active yet, we will replace using git###
 wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz -O ViMbAdmin.tar.gz
@@ -94,10 +110,10 @@ chkconfig httpd on; service httpd start
 
 # Installing ROUNDCUBE
 echo "Installing Roundcube  Database"
-mysql -u root -e "CREATE DATABASE $DBNAMEROUNDCUBE; \
+${MYCOMMAND} -e "CREATE DATABASE $DBNAMEROUNDCUBE; \
 GRANT ALL ON $DBNAMEROUNDCUBE.* TO $DBUSERROUNDCUBE@$DBHOSTROUNDCUBE IDENTIFIED BY \"$DBPASSROUNDCUBE\"; \
 FLUSH PRIVILEGES;"
-mysql -u root $DBNAMEROUNDCUBE < $CONFIGDIR/roundcube/roundcubemail.sql
+${MYCOMMAND} $DBNAMEROUNDCUBE < $CONFIGDIR/roundcube/roundcubemail.sql
 echo "Database Roundcube created";
 echo "Extracting Roundcube"
 tar zxf $CONFIGDIR/roundcube/roundcubemail.tar.gz
