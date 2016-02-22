@@ -8,11 +8,10 @@ echo "1. This script works only on RHEL 6.x or CentOS 6.x or any other linux dis
 echo "2. Ensure that your hostname is Fully Qualified Domain Name (FQDN) [Example: mail.example.com]"
 echo "3. sentraMail will use your hostname as a subdomain to access roundcube and ViMbAdmin"
 echo "4. Ensure that you already setup DNS and MX Correctly to this IP Address"
-echo "5. Ensure that MySQL server having no password (fresh installation)"
-echo "6. Mailbox will be installed on /srv/vmail directory."
-echo "7. Roundcube will be installed on /var/www/roundcubemail"
-echo "8. ViMbAdmin will be installed on /var/www/ViMbAdmin"
-echo "9. After the installation, please take a look the documentation on /root/sentraMail.log"
+echo "5. Mailbox will be installed on /srv/vmail directory."
+echo "6. Roundcube will be installed on /var/www/roundcubemail"
+echo "7. ViMbAdmin will be installed on /var/www/ViMbAdmin"
+echo "8. After the installation, please take a look the documentation on /root/sentraMail.log"
 echo ""
 read -rsp "Press ENTER to continue..."
 printf "\033c"
@@ -55,7 +54,8 @@ mkdir -p /srv/archives; chown vmail:vmail /srv/archives
 
 /etc/init.d/iptables stop
 yum -y update; yum -y install wget; yum -y install epel-release
-wget http://rpms.famillecollet.com/enterprise/remi-release-6.rpm -O remi-release-6.rpm
+echo "Download Remi Repository, please wait..."
+wget -q http://rpms.famillecollet.com/enterprise/remi-release-6.rpm -O remi-release-6.rpm
 yum -y localinstall remi-release-6.rpm
 \cp $CONFIGDIR/repo/remi.repo /etc/yum.repos.d/remi.repo
 yum -y install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php-pear php-pecl-igbinary php-pecl-msgpack php-pdo php-mysqlnd php-pecl-memcached php-pecl-memcache php php-soap php-xml php-intl php-process php-mbstring mysql-server dovecot dovecot-pigeonhole dovecot-mysql mod_ssl clamav-db clamav clamd spamassassin amavisd-new git
@@ -73,6 +73,7 @@ FLUSH PRIVILEGES;"
 ${MYCOMMAND} $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql
 echo "Database ViMbAdmin created";
 ####this links is not active yet, we will replace using git###
+echo "Download ViMbAdmin source code, please wait..."
 wget http://sentradata.id/sentraMail/ViMbAdmin.tar.gz -O ViMbAdmin.tar.gz
 # git clone https://github.com/opensolutions/ViMbAdmin.git /var/www
 # curl -sS https://getcomposer.org/installer | php
@@ -127,7 +128,7 @@ sed -i "s/DBUSERROUNDCUBE/$DBUSERROUNDCUBE/g" /var/www/roundcubemail/config/conf
 sed -i "s/DBPASSROUNDCUBE/$DBPASSROUNDCUBE/g" /var/www/roundcubemail/config/config.inc.php.bundle
 mv /var/www/roundcubemail/config/config.inc.php /var/www/roundcubemail/config/config.inc.php.old
 mv /var/www/roundcubemail/config/config.inc.php.bundle /var/www/roundcubemail/config/config.inc.php
-chcon -t httpd_sys_content_t /var/www/ -R
+if [ "`getenforce`" != "Disabled" ]; then chcon -t httpd_sys_content_t /var/www/ -R; fi
 service httpd reload
 echo "Roundcube can be accessed on http://`hostname`/mail or http://`hostname`/webmail"
 
@@ -187,11 +188,10 @@ echo "1. This script works only on RHEL 6.x or CentOS 6.x or any other linux dis
 echo "2. Ensure that your hostname is Fully Qualified Domain Name (FQDN) [Example: mail.example.com]" >> /root/sentraMail.log
 echo "3. sentraMail will use your hostname as a subdomain to access roundcube and ViMbAdmin" >> /root/sentraMail.log
 echo "4. Ensure that you already setup DNS and MX Correctly to this IP Address" >> /root/sentraMail.log
-echo "5. Ensure that MySQL server having no password (fresh installation)" >> /root/sentraMail.log
-echo "6. Mailbox will be installed on /srv/vmail directory." >> /root/sentraMail.log
-echo "7. Roundcube will be installed on /var/www/roundcubemail" >> /root/sentraMail.log
-echo "8. ViMbAdmin will be installed on /var/www/ViMbAdmin" >> /root/sentraMail.log
-echo "9. After the installation, please take a look the documentation on /root/sentraMail.log" >> /root/sentraMail.log
+echo "5. Mailbox will be installed on /srv/vmail directory." >> /root/sentraMail.log
+echo "6. Roundcube will be installed on /var/www/roundcubemail" >> /root/sentraMail.log
+echo "7. ViMbAdmin will be installed on /var/www/ViMbAdmin" >> /root/sentraMail.log
+echo "8. After the installation, please take a look the documentation on /root/sentraMail.log" >> /root/sentraMail.log
 echo "" >> /root/sentraMail.log
 echo "DB NAME ViMbAdmin: $DBNAMEVIMBADMIN" >> /root/sentraMail.log
 echo "DB USER ViMbAdmin: $DBUSERVIMBADMIN" >> /root/sentraMail.log
