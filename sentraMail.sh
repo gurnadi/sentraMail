@@ -226,8 +226,7 @@ else
   chkconfig iptables on; /etc/init.d/iptables restart
 fi
 
-echo "We will hardening Your MySQL Configuration";
-echo "Please fill in the form correctly"
+echo "Hardening MySQL";
 
 if [ "${YOURDBPASS}" == "" ]; then
   read -p "Please type a new root password for MySQL: " YOURNEWDBPASS
