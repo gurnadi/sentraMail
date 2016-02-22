@@ -228,11 +228,10 @@ fi
 
 echo "Hardening MySQL";
 
-if [ "${YOURDBPASS}" == "" ]; then
-  read -p "Please type a new root password for MySQL: " YOURNEWDBPASS
-  mysqladmin -u${YOURDBUSER} -h${YOURDBHOST} password "$YOURNEWDBPASS";
+if [ "${CHECKMYSQL2}" == "0" ]; then
+  echo "Created a new password for MySQL"
+  mysqladmin -u${YOURDBUSER} -h${YOURDBHOST} password "${YOURDBPASS}";
   #mysql_secure_installation
-  YOURDBPASS="${YOURNEWDBPASS}"
 fi
 
 mysql -u${YOURDBUSER} -p${YOURDBPASS} -h${YOURDBHOST} -e "DELETE FROM mysql.user WHERE User=''; \
