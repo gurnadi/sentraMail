@@ -69,7 +69,7 @@ if [ "`/etc/init.d/mysqld status | grep stopped`" != "" ]; then
   chkconfig mysqld on; service mysqld start
 fi
 
-if [ "${YOURDBBPASS}" != "" ]; then 
+if [ "${YOURDBPASS}" != "" ]; then 
   CHECKMYSQL1=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -p${YOURDBPASS} -e exit 2>/dev/null; echo $?`
   CHECKMYSQL2=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -e exit 2>/dev/null; echo $?`
 else
