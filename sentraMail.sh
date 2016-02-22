@@ -36,12 +36,12 @@ OFFICIALEMAIL="noreply@${YOURDOMAIN}";
 DBNAMEVIMBADMIN="vimbadmin";
 DBUSERVIMBADMIN="vimbadmin";
 DBPASSVIMBADMIN=`head -c 500 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
-DBHOSTVIMBADMIN="localhost";
+DBHOSTVIMBADMIN="${YOURDBHOST}";
 
 DBNAMEROUNDCUBE="roundcube";
 DBUSERROUNDCUBE="roundcube";
 DBPASSROUNDCUBE=`head -c 500 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
-DBHOSTROUNDCUBE="localhost";
+DBHOSTROUNDCUBE="${YOURDBHOST}";
 
 groupadd -g 2000 vmail
 useradd -c 'Virtual Mailboxes' -d /srv/vmail -g 2000 -u 2000 -s /usr/sbin/nologin -m vmail
@@ -123,7 +123,7 @@ else
   chkconfig httpd on; service httpd reload
 fi
 php /var/www/ViMbAdmin/bin/doctrine2-cli.php orm:schema-tool:create
-${MYCOMMAND} ${DBNAMEVIMBADMIN} -e "INSERT INTO admin VALUES (1,'postmaster@example.com','$2a$09$MHzYD4VRrAb2uZI8hXi4bOVbfDHoBJdTKqw.7kMjAosWwAotD4mxq',1,1,'2016-02-18 03:12:50','2016-02-18 03:12:50');"
+${MYCOMMAND} ${DBNAMEVIMBADMIN} -e "INSERT INTO admin VALUES (1,'postmaster@example.com','\$2a\$09\$MHzYD4VRrAb2uZI8hXi4bOVbfDHoBJdTKqw.7kMjAosWwAotD4mxq',1,1,'2016-02-18 03:12:50','2016-02-18 03:12:50');"
 
 # Installing ROUNDCUBE
 echo "Installing Roundcube Database"
