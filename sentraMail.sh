@@ -68,8 +68,9 @@ echo "Turn on MySQL Server"
 if [ "`/etc/init.d/mysqld status | grep stopped`" != "" ]; then
   chkconfig mysqld on; service mysqld start
 fi
-
-CHECKMYSQL1=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -p${YOURDBPASS} -e exit 2>/dev/null; echo $?`
+if [ "${YOURDBPASS}" != "" ]; then
+  CHECKMYSQL1=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -p${YOURDBPASS} -e exit 2>/dev/null; echo $?`
+fi
 CHECKMYSQL2=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -e exit 2>/dev/null; echo $?`
 
 if [ "$CHECKMYSQL1" == "1" ] && [ "$CHECKMYSQL2" == "1" ]; then
