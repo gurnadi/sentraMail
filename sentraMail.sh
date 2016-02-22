@@ -72,13 +72,14 @@ yum -y -q install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php
 echo "Turn on MySQL Server"
 if [ "`/etc/init.d/mysqld status | grep stopped`" != "" ]; then
   chkconfig mysqld on; service mysqld start
-  ${MYCOMMAND} -e exit 2>/dev/null
-  DBSTATUS=`echo $?`
-  if [ ${DBSTATUS} -ne 0 ]; then
-    echo "Incorrect MySQL Parameter (DB Host, DB User or DB Pass)"
-    echo "Ensure that you type correctly DB Host, DB User and DB Password"
-    exit 1
-  fi
+fi
+
+${MYCOMMAND} -e exit 2>/dev/null
+DBSTATUS=`echo $?`
+if [ ${DBSTATUS} -ne 0 ]; then
+  echo "Incorrect MySQL Parameter (DB Host, DB User or DB Pass)"
+  echo "Ensure that you type correctly DB Host, DB User and DB Password"
+  exit 1
 fi
 
 # Installing VIMBADMIN
@@ -118,8 +119,11 @@ sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /var/www/ViMbAdmin/application/con
 sed -i "s/DBPASSVIMBADMIN/$DBPASSVIMBADMIN/g" /var/www/ViMbAdmin/application/configs/application.ini
 echo "Turn on Apache Web Server"
 echo "ViMbAdmin can be accessed on http://`hostname`/mailmin"
-chkconfig httpd on; service httpd start
-
+if [ "`/etc/init.d/httpd status | grep stopped`" != "" ]; then
+  chkconfig httpd on; service httpd start
+else  
+  chkconfig httpd on; service httpd reload
+fi
 # this line will be act to replace "mysql -u root $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql"
 # /var/www/ViMbAdmin/doctrine2-cli.php orm:schema-tool:create
 # insert default username & password for ViMbAdmin
@@ -150,7 +154,9 @@ echo "Roundcube can be accessed on http://`hostname`/mail or http://`hostname`/w
 
 # Installing POSTFIX
 echo "Postfix Configuration"
-/etc/init.d/postfix stop
+if [ "`/etc/init.d/postfix status | grep stopped`" == "" ]; then
+  /etc/init.d/postfix stop
+fi
 \cp $CONFIGDIR/postfix/main.cf /etc/postfix/
 sed -i "s/MYHOSTNAME/`hostname`/g" /etc/postfix/main.cf
 sed -i "s/MYEMAIL/$OFFICIALEMAIL/g" /etc/postfix/main.cf
@@ -168,17 +174,28 @@ sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /etc/postfix/mysql/*
 sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /etc/postfix/mysql/*
 sed -i "s/DBPASSVIMBADMIN/$DBPASSVIMBADMIN/g" /etc/postfix/mysql/*
 echo "Turn on Postfix"
-chkconfig postfix on; /etc/init.d/postfix start
-
+if [ "`/etc/init.d/postfix status | grep stopped`" != "" ]; then
+  chkconfig postfix on; /etc/init.d/postfix start
+else
+  chkconfig postfix on; /etc/init.d/postfix restart
+fi
 # Installing AMAVISD
 echo "Amavis Daemon Configuration"
 \cp $CONFIGDIR/amavisd/amavisd.conf /etc/amavisd/
 sed -i "s/MYHOSTNAME/`hostname`/g" /etc/amavisd/amavisd.conf
 sed -i "s/MYHOSTNAME/`hostname`/g" /etc/amavisd/amavisd.conf
 echo "Turn on Amavis Daemon"
-chkconfig amavisd on; /etc/init.d/amavisd start
+if [ "`/etc/init.d/amavisd status | grep stopped`" != "" ]; then
+  chkconfig amavisd on; /etc/init.d/amavisd start
+else
+  chkconfig amavisd on; /etc/init.d/amavisd restart
+fi
 echo "Turn on Clamav-Amavis Daemon"
-chkconfig clamd.amavisd on; /etc/init.d/clamd.amavisd start
+if [ "`/etc/init.d/clamd.amavisd status | grep stopped`" != "" ]; then
+  chkconfig clamd.amavisd on; /etc/init.d/clamd.amavisd start
+else
+  chkconfig clamd.amavisd on; /etc/init.d/clamd.amavisd restart
+fi
 
 # Installing DOVECOT
 echo "Dovecot Configuration"
@@ -194,11 +211,34 @@ sed -i "s/DBHOSTVIMBADMIN/$DBHOSTVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
 sed -i "s/DBUSERVIMBADMIN/$DBUSERVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
 sed -i "s/DBPASSVIMBADMIN/$DBPASSVIMBADMIN/g" /etc/dovecot/dovecot-sql.conf.ext
 echo "Turn on Dovecot"
-chkconfig dovecot on; /etc/init.d/dovecot start
-
+if [ "`/etc/init.d/clamd.dovecot status | grep stopped`" != "" ]; then
+  chkconfig dovecot on; /etc/init.d/dovecot start
+else
+  chkconfig dovecot on; /etc/init.d/dovecot restart
+fi
 echo "Turn on IPTables"
 \cp $CONFIGDIR/iptables /etc/sysconfig/iptables
-chkconfig iptables on; /etc/init.d/iptables start
+if [ "`/etc/init.d/iptables status | grep stopped`" != "" ]; then
+  chkconfig iptables on; /etc/init.d/iptables start
+else
+  chkconfig iptables on; /etc/init.d/iptables restart
+fi
+
+echo "We will hardening Your MySQL Configuration";
+echo "Please fill in the form correctly"
+
+if [ "${YOURDBPASS}" == "" ]; then
+  read -p "Please type a new root password for MySQL: " YOURNEWDBPASS
+  mysqladmin -u${YOURDBUSER} -h${YOURDBHOST} password "$YOURNEWDBPASS";
+  #mysql_secure_installation
+  YOURDBPASS="${YOURNEWDBPASS}"
+fi
+
+mysql -u${YOURDBUSER} -p${YOURDBPASS} -h${YOURDBHOST} -e "DELETE FROM mysql.user WHERE User=''; \
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1'); \
+DROP DATABASE test; \
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'; \
+FLUSH PRIVILEGES;"  
 
 echo "1. This script works only on RHEL 6.x or CentOS 6.x or any other linux distribution based on RHEL" > /root/sentraMail.log
 echo "2. Ensure that your hostname is Fully Qualified Domain Name (FQDN) [Example: mail.example.com]" >> /root/sentraMail.log
@@ -209,6 +249,12 @@ echo "6. Roundcube will be installed on /var/www/roundcubemail" >> /root/sentraM
 echo "7. ViMbAdmin will be installed on /var/www/ViMbAdmin" >> /root/sentraMail.log
 echo "8. After the installation, please take a look the documentation on /root/sentraMail.log" >> /root/sentraMail.log
 echo "" >> /root/sentraMail.log
+
+echo "Your DB Host: ${YOURDBHOST}" >> /root/sentraMail.log
+echo "Your DB User: ${YOURDBUSER}" >> /root/sentraMail.log
+echo "Your DB Pass: ${YOURDBPASS}" >> /root/sentraMail.log
+echo "" >> /root/sentraMail.log
+
 echo "DB NAME ViMbAdmin: $DBNAMEVIMBADMIN" >> /root/sentraMail.log
 echo "DB USER ViMbAdmin: $DBUSERVIMBADMIN" >> /root/sentraMail.log
 echo "DB PASS ViMbAdmin: $DBPASSVIMBADMIN" >> /root/sentraMail.log
@@ -238,16 +284,9 @@ netstat -tupln | grep LISTEN >> /root/sentraMail.log
 echo "" >> /root/sentraMail.log
 
 echo "iptables -L" >> /root/sentraMail.log
-echo ""
+echo "" >> /root/sentraMail.log
+
 iptables -L >> /root/sentraMail.log
-
-if [ "${YOURDBPASS}" == "" ]; then
-  echo "You dont have a password for root MYSQL"
-  echo "We will hardening Your MySQL Configuration";
-  echo "Please fill in the form correctly"
-  mysql_secure_installation
-fi
-
 echo ""
-echo ""
+
 echo "INSTALLATION DONE!, please check /root/sentraMail.log";
