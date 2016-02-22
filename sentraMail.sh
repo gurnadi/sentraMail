@@ -70,7 +70,16 @@ yum -y -q install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php
 \cp $CONFIGDIR/php/php.ini /etc/php.ini
 
 echo "Turn on MySQL Server"
-chkconfig mysqld on; service mysqld start
+if [ "`/etc/init.d/mysqld status | grep stopped`" != "" ]; then
+  chkconfig mysqld on; service mysqld start
+  ${MYCOMMAND} -e exit 2>/dev/null
+  DBSTATUS=`echo $?`
+  if [ ${DBSTATUS} -ne 0 ]; then
+    echo "Incorrect MySQL Parameter (DB Host, DB User or DB Pass)"
+    echo "Ensure that you type correctly DB Host, DB User and DB Password"
+    exit 1
+  fi
+fi
 
 # Installing VIMBADMIN
 echo "Installing ViMbAdmin Database"
@@ -232,8 +241,12 @@ echo "iptables -L" >> /root/sentraMail.log
 echo ""
 iptables -L >> /root/sentraMail.log
 
-echo "Hardening Your MySQL Configuration";
-mysql_secure_installation
+if [ "${YOURDBPASS}" == "" ]; then
+  echo "You dont have a password for root MYSQL"
+  echo "We will hardening Your MySQL Configuration";
+  echo "Please fill in the form correctly"
+  mysql_secure_installation
+fi
 
 echo ""
 echo ""
