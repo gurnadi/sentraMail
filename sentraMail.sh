@@ -94,22 +94,13 @@ echo "Installing ViMbAdmin Database"
 ${MYCOMMAND} -e "CREATE DATABASE $DBNAMEVIMBADMIN; \
 GRANT ALL ON $DBNAMEVIMBADMIN.* TO $DBUSERVIMBADMIN@$DBHOSTVIMBADMIN IDENTIFIED BY \"$DBPASSVIMBADMIN\"; \
 FLUSH PRIVILEGES;"
-${MYCOMMAND} $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql
-echo "Database ViMbAdmin created";
-####this links is not active yet, we will replace using git###
-echo "Download ViMbAdmin source code, please wait..."
-wget -q http://sentradata.id/sentraMail/ViMbAdmin.tar.gz -O ViMbAdmin.tar.gz
-# git clone https://github.com/opensolutions/ViMbAdmin.git /var/www
-# curl -sS https://getcomposer.org/installer | php
-# mv composer.phar /var/www/ViMbAdmin/composer
-# DSTDIR=`pwd`
-# cd /var/www/ViMbAdmin
-# ./composer install
-# cd $DSTDIR
-###################################
-echo "Extracting ViMbAdmin"
-tar zxf $CONFIGDIR/ViMbAdmin.tar.gz
-mv ViMbAdmin /var/www
+echo "Download ViMbAdmin, please wait..."
+cd /var/www; git clone https://github.com/opensolutions/ViMbAdmin.git
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /var/www/ViMbAdmin/composer
+cd /var/www/ViMbAdmin
+./composer install
+cd $CONFIGDIR
 chown apache:apache /var/www/ViMbAdmin/data -R
 chown apache:apache /var/www/ViMbAdmin/var -R
 \cp $CONFIGDIR/vimbadmin/ViMbAdmin.conf /etc/httpd/conf.d/
@@ -131,13 +122,11 @@ if [ "`/etc/init.d/httpd status | grep stopped`" != "" ]; then
 else  
   chkconfig httpd on; service httpd reload
 fi
-# this line will be act to replace "mysql -u root $DBNAMEVIMBADMIN < $CONFIGDIR/vimbadmin/ViMbAdmin.sql"
-# /var/www/ViMbAdmin/doctrine2-cli.php orm:schema-tool:create
-# insert default username & password for ViMbAdmin
-# insert salt and configure application.ini 
+php /var/www/ViMbAdmin/bin/doctrine2-cli.php orm:schema-tool:create
+${MYCOMMAND} ${DBNAMEVIMBADMIN} -e "INSERT INTO admin VALUES (1,'postmaster@example.com','$2a$09$MHzYD4VRrAb2uZI8hXi4bOVbfDHoBJdTKqw.7kMjAosWwAotD4mxq',1,1,'2016-02-18 03:12:50','2016-02-18 03:12:50');"
 
 # Installing ROUNDCUBE
-echo "Installing Roundcube  Database"
+echo "Installing Roundcube Database"
 ${MYCOMMAND} -e "CREATE DATABASE $DBNAMEROUNDCUBE; \
 GRANT ALL ON $DBNAMEROUNDCUBE.* TO $DBUSERROUNDCUBE@$DBHOSTROUNDCUBE IDENTIFIED BY \"$DBPASSROUNDCUBE\"; \
 FLUSH PRIVILEGES;"
