@@ -27,12 +27,6 @@ if [ "${YOURDBHOST}" == "" ] || [ "${YOURDBUSER}" == "" ]; then
     exit 1
 fi
 
-if [ "${YOURDBPASS}" != "" ]; then
-    MYCOMMAND="mysql -u${YOURDBUSER} -h${YOURDBHOST} -p${YOURDBPASS} "
-else
-    MYCOMMAND="mysql -u${YOURDBUSER} -h${YOURDBHOST} "
-fi
-
 echo ""
 read -rsp "Are you sure? Press ENTER if YES or CTRL+C to abort"
 echo ""
@@ -75,12 +69,19 @@ if [ "`/etc/init.d/mysqld status | grep stopped`" != "" ]; then
   chkconfig mysqld on; service mysqld start
 fi
 
-${MYCOMMAND} -e exit 2>/dev/null
-DBSTATUS=`echo $?`
-if [ ${DBSTATUS} -ne 0 ]; then
+CHECKMYSQL1=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -p${YOURDBPASS} -e exit 2>/dev/null; echo $?`
+CHECKMYSQL2=`mysql -u${YOURDBUSER} -h${YOURDBHOST} -e exit 2>/dev/null; echo $?`
+
+if [ "$CHECKMYSQL1" == "1" ] && [ "$CHECKMYSQL2" == "1" ]; then
   echo "Incorrect MySQL Parameter (DB Host, DB User or DB Pass)"
   echo "Ensure that you type correctly DB Host, DB User and DB Password"
   exit 1
+fi
+
+if [ "${CHECKMYSQL1}" == "0" ]; then 
+  MYCOMMAND="mysql -u${YOURDBUSER} -h${YOURDBHOST} -p${YOURDBPASS} "; 
+else
+  MYCOMMAND="mysql -u${YOURDBUSER} -h${YOURDBHOST} "
 fi
 
 # Installing VIMBADMIN
