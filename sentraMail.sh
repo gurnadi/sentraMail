@@ -144,7 +144,17 @@ sed -i "s/DBUSERROUNDCUBE/$DBUSERROUNDCUBE/g" /var/www/roundcubemail/config/conf
 sed -i "s/DBPASSROUNDCUBE/$DBPASSROUNDCUBE/g" /var/www/roundcubemail/config/config.inc.php.bundle
 mv /var/www/roundcubemail/config/config.inc.php /var/www/roundcubemail/config/config.inc.php.old
 mv /var/www/roundcubemail/config/config.inc.php.bundle /var/www/roundcubemail/config/config.inc.php
-if [ "`getenforce`" != "Disabled" ]; then chcon -t httpd_sys_content_t /var/www/ -R; fi
+if [ "`getenforce`" != "Disabled" ]; then 
+  chcon -t httpd_sys_content_t /var/www/ -R; 
+  semanage fcontext -a -t mail_spool_t "/srv(/.*)?";
+  restorecon -R /srv;
+  semanage fcontext -a -t httpd_sys_content_t "/var/www/roundcubemail(/.*)?";
+  semanage fcontext -a -t httpd_log_t "/var/www/roundcubemail/logs(/.*)?";
+  restorecon -Rv /var/www/roundcubemail;
+  semanage fcontext -a -t httpd_sys_content_t "/var/www/ViMbAdmin(/.*)?";
+  semanage fcontext -a -t httpd_log_t "/var/www/ViMbAdmin/var/log(/.*)?";
+  restorecon -Rv /var/www/ViMbAdmin;
+fi
 service httpd reload
 echo "Roundcube can be accessed on http://`hostname`/mail or http://`hostname`/webmail"
 
