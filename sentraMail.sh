@@ -60,7 +60,7 @@ echo "Install Remi Repository, please wait..."
 yum -y -q localinstall remi-release-6.rpm
 \cp $CONFIGDIR/repo/remi.repo /etc/yum.repos.d/remi.repo
 echo "Installing all packages. It will takes a long time, depends on your connection, please be patience..."
-yum -y -q install mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php-pear php-pecl-igbinary php-pecl-msgpack php-pdo php-mysqlnd php-pecl-memcached php-pecl-memcache php php-soap php-xml php-intl php-process php-mbstring mysql-server dovecot dovecot-pigeonhole dovecot-mysql mod_ssl clamav-db clamav clamd spamassassin amavisd-new git
+yum -y -q install policycoreutils-python mysql httpd php-pecl-jsonc php-common php-pecl-zip php-cli php-pear php-pecl-igbinary php-pecl-msgpack php-pdo php-mysqlnd php-pecl-memcached php-pecl-memcache php php-soap php-xml php-intl php-process php-mbstring mysql-server dovecot dovecot-pigeonhole dovecot-mysql mod_ssl clamav-db clamav clamd spamassassin amavisd-new git
 \cp $CONFIGDIR/mysql/my.cnf /etc/my.cnf
 \cp $CONFIGDIR/php/php.ini /etc/php.ini
 
